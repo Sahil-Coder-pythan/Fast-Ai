@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexusAI — Intelligent Business Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Setup Screen -->
+    <div id="setup-screen" class="screen active">
+        <div class="bg-effects">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+            <div class="grid-overlay"></div>
+        </div>
+
+        <header class="top-bar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="url(#grad)" stroke-width="2"/>
+                        <path d="M12 20 L18 26 L28 14" stroke="url(#grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="grad" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="100%" stop-color="#a855f7"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="brand">NexusAI</span>
+                    <span class="tagline">Intelligent Business Companion</span>
+                </div>
+            </div>
+            <div class="status-badge">
+                <span class="pulse"></span>
+                System Ready
+            </div>
+        </header>
+
+        <main class="setup-main">
+            <section class="hero">
+                <h1>Your Company's <span class="gradient-text">Second Brain</span></h1>
+                <p class="hero-sub">Upload files. Connect apps. Activate intelligence.<br>
+                Put your API Key, URL & Model inside any text file — system will auto-detect & connect.</p>
+            </section>
+
+            <div class="panels">
+                <!-- Upload Panel -->
+                <div class="panel upload-panel">
+                    <div class="panel-header">
+                        <div class="panel-icon upload-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>Upload Files</h3>
+                            <p>Financials, reports, logs + one file with API_KEY, BASE_URL, MODEL</p>
+                        </div>
+                    </div>
+                    
+                    <div class="drop-zone" id="drop-zone">
+                        <div class="drop-content">
+                            <div class="drop-icon">📁</div>
+                            <p>Drag & drop files here</p>
+                            <span>or</span>
+                            <label class="browse-btn">
+                                Browse Files
+                                <input type="file" id="file-input" multiple hidden 
+                                    accept=".txt,.csv,.xlsx,.xls,.pdf,.doc,.docx,.json,.log,.png,.jpg,.jpeg,.env,.md">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="file-list" id="file-list"></div>
+                </div>
+
+                <!-- Connect Apps Panel -->
+                <div class="panel connect-panel">
+                    <div class="panel-header">
+                        <div class="panel-icon connect-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>Connect Apps</h3>
+                            <p>Link WhatsApp, Settings, Wi-Fi & more</p>
+                        </div>
+                    </div>
+
+                    <div class="apps-grid">
+                        <button class="app-btn" data-app="WhatsApp" onclick="connectApp(this)">
+                            <span class="app-emoji">💬</span>
+                            <span class="app-name">WhatsApp</span>
+                            <span class="app-status">Connect</span>
+                        </button>
+                        <button class="app-btn" data-app="Settings" onclick="connectApp(this)">
+                            <span class="app-emoji">⚙️</span>
+                            <span class="app-name">Settings</span>
+                            <span class="app-status">Connect</span>
+                        </button>
+                        <button class="app-btn" data-app="Wi-Fi" onclick="connectApp(this)">
+                            <span class="app-emoji">📶</span>
+                            <span class="app-name">Wi-Fi</span>
+                            <span class="app-status">Connect</span>
+                        </button>
+                        <button class="app-btn" data-app="Gmail" onclick="connectApp(this)">
+                            <span class="app-emoji">📧</span>
+                            <span class="app-name">Gmail</span>
+                            <span class="app-status">Connect</span>
+                        </button>
+                        <button class="app-btn" data-app="Messages" onclick="connectApp(this)">
+                            <span class="app-emoji">💭</span>
+                            <span class="app-name">Messages</span>
+                            <span class="app-status">Connect</span>
+                        </button>
+                        <button class="app-btn" data-app="Drive" onclick="connectApp(this)">
+                            <span class="app-emoji">☁️</span>
+                            <span class="app-name">Cloud Drive</span>
+                            <span class="app-status">Connect</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activate Section -->
+            <div class="activate-section">
+                <div class="activate-card">
+                    <div class="activate-info">
+                        <h2>Ready to Activate?</h2>
+                        <p>Upload files (including one file with API_KEY + BASE_URL + MODEL). System will auto-detect the key. Then press Activate.</p>
+                        <div class="checklist" id="checklist">
+                            <div class="check-item" id="check-files">
+                                <span class="check-icon">○</span>
+                                <span>Upload at least one file</span>
+                            </div>
+                            <div class="check-item" id="check-apps">
+                                <span class="check-icon">○</span>
+                                <span>Connect at least one app (optional)</span>
+                            </div>
+                            <div class="check-item" id="check-api">
+                                <span class="check-icon">○</span>
+                                <span>API Key auto-detected from files</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="activate-btn" id="activate-btn" onclick="activateSystem()">
+                        <span class="btn-text">ACTIVATE NEXUSAI</span>
+                        <span class="btn-icon">⚡</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Transition Screen (black/white center) -->
+    <div id="transition-screen" class="screen">
+        <div class="transition-center">
+            <div class="loader-ring"></div>
+            <div class="transition-text">NexusAI Initializing...</div>
+            <div class="transition-sub" id="transition-sub">Detecting API credentials & loading files</div>
+        </div>
+    </div>
+
+    <!-- Active / Analysis Screen -->
+    <div id="active-screen" class="screen">
+        <div class="active-bg">
+            <div class="scanline"></div>
+        </div>
+
+        <header class="active-header">
+            <div class="logo mini">
+                <div class="logo-icon small">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="url(#grad2)" stroke-width="2"/>
+                        <path d="M12 20 L18 26 L28 14" stroke="url(#grad2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="grad2" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#22c55e"/>
+                                <stop offset="100%" stop-color="#10b981"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="brand">NexusAI</span>
+                <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+            </div>
+            
+            <div class="header-controls">
+                <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Switch theme">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                <button class="power-btn" onclick="deactivateSystem()" title="Turn Off">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>
+                        <line x1="12" y1="2" x2="12" y2="12"/>
+                    </svg>
+                    OFF
+                </button>
+            </div>
+        </header>
+
+        <div class="active-body">
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h4>Connected Apps</h4>
+                    <div class="connected-list" id="connected-list">
+                        <p class="empty-state">No apps connected</p>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Uploaded Files</h4>
+                    <div class="sidebar-files" id="sidebar-files">
+                        <p class="empty-state">No files</p>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h4>API Status</h4>
+                    <div id="api-status" class="api-status-box">
+                        <span class="status-dot offline"></span>
+                        <span id="api-status-text">Demo Mode</span>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Quick Actions</h4>
+                    <button class="quick-btn" onclick="askQuick('What was our company loss last year?')">
+                        📉 Last Year Loss
+                    </button>
+                    <button class="quick-btn" onclick="askQuick('How can we improve and recover profit this year?')">
+                        📈 Recovery Plan
+                    </button>
+                    <button class="quick-btn" onclick="askQuick('Is this message a scam?')">
+                        🛡️ Scam Check
+                    </button>
+                </div>
+            </aside>
+
+            <div class="chat-area">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai-message">
+                        <div class="msg-avatar">N</div>
+                        <div class="msg-content">
+                            <div class="msg-header">
+                                <span class="msg-name">NexusAI</span>
+                                <span class="msg-time">Just now</span>
+                            </div>
+                            <div class="msg-text">
+                                System is <strong>ONLINE</strong> and monitoring.<br><br>
+                                I've loaded your files. Ask me anything — for example:<br>
+                                • "What was our loss last year?"<br>
+                                • "Show me Sanduar 26 performance with chart"<br>
+                                • "How do we avoid the same losses this year?"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="input-wrapper">
+                        <textarea id="user-input" placeholder="Ask anything about your data..." rows="1" 
+                            onkeydown="handleKey(event)"></textarea>
+                        <button class="send-btn" onclick="sendMessage()" id="send-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

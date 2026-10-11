@@ -9,7 +9,7 @@ import requests
 
 # Flat structure - everything in root
 app = Flask(__name__, template_folder='.', static_folder='.', static_url_path='')
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['UPLOAD_FOLDER'] = '/tmp/nexus_uploads'
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024
 app.config['SECRET_KEY'] = 'nexus-ai-secret-key-2026'
 
@@ -24,26 +24,37 @@ def index():
 
 @app.route('/api/upload', methods=['POST'])
 def upload_files():
-    if 'files' not in request.files:
-        return jsonify({'error': 'No files provided'}), 400
-    files = request.files.getlist('files')
-    uploaded = []
-    for file in files:
-        if file and file.filename and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            unique_name = f"{uuid.uuid4().hex[:8]}_{filename}"
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_name)
-            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-            file.save(filepath)
-            size = os.path.getsize(filepath)
-            uploaded.append({
-                'id': unique_name,
-                'name': filename,
-                'size': size,
-                'type': filename.rsplit('.', 1)[1].lower() if '.' in filename else 'unknown',
-                'uploaded_at': datetime.now().isoformat()
-            })
-    return jsonify({'success': True, 'files': uploaded})
+    try:
+        if 'files' not in request.files:
+            return jsonify({'error': 'No files provided'}), 400
+        files = request.files.getlist('files')
+        if not files or all(f.filename == '' for f in files):
+            return jsonify({'error': 'No files selected'}), 400
+
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        uploaded = []
+
+        for file in files:
+            if file and file.filename and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                unique_name = f"{uuid.uuid4().hex[:8]}_{filename}"
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], unique_name)
+                file.save(filepath)
+                size = os.path.getsize(filepath)
+                uploaded.append({
+                    'id': unique_name,
+                    'name': filename,
+                    'size': size,
+                    'type': filename.rsplit('.', 1)[1].lower() if '.' in filename else 'unknown',
+                    'uploaded_at': datetime.now().isoformat()
+                })
+
+        if not uploaded:
+            return jsonify({'error': 'No valid files uploaded. Allowed: txt,csv,pdf,json,log,md,env,xlsx,doc'}), 400
+
+        return jsonify({'success': True, 'files': uploaded})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/files', methods=['GET'])
 def list_files():

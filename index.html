@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NexusAI — Intelligent Business Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- SETUP SCREEN -->
+    <div id="setup-screen" class="screen active">
+        <div class="bg-effects">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="grid-overlay"></div>
+        </div>
+
+        <header class="top-bar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="url(#g1)" stroke-width="2"/><path d="M12 20 L18 26 L28 14" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="40" y2="40"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs></svg>
+                </div>
+                <div class="logo-text">
+                    <span class="brand">NexusAI</span>
+                    <span class="tagline">Intelligent Business Companion</span>
+                </div>
+            </div>
+            <div class="status-badge"><span class="pulse"></span> System Ready</div>
+        </header>
+
+        <main class="setup-main">
+            <section class="hero">
+                <h1>Your Company's <span class="gradient-text">Second Brain</span></h1>
+                <p class="hero-sub">Upload files • Speak or type questions • Get real charts & spoken answers</p>
+            </section>
+
+            <!-- API CONFIG BOX -->
+            <div class="panel api-panel">
+                <div class="panel-header">
+                    <div class="panel-icon" style="background:rgba(234,179,8,0.15);color:#eab308;">🔑</div>
+                    <div>
+                        <h3>Add API Key (Makes it Super Powerful)</h3>
+                        <p>OpenAI / Grok / Groq — Key + URL + Model</p>
+                    </div>
+                </div>
+                <div class="api-form">
+                    <div class="api-row">
+                        <div class="api-field">
+                            <label>API Key</label>
+                            <input type="password" id="api-key" placeholder="sk-... or xai-... or gsk_...">
+                        </div>
+                        <div class="api-field">
+                            <label>Base URL</label>
+                            <input type="text" id="api-base" placeholder="https://api.openai.com/v1">
+                        </div>
+                    </div>
+                    <div class="api-row">
+                        <div class="api-field">
+                            <label>Model Name</label>
+                            <input type="text" id="api-model" placeholder="gpt-4o-mini / grok-3 / llama-3.3-70b-versatile">
+                        </div>
+                        <div class="api-field" style="display:flex;align-items:flex-end;">
+                            <button class="save-api-btn" onclick="saveApiConfig()">Save & Connect API</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panels">
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-icon upload-icon">📁</div>
+                        <div>
+                            <h3>Upload Files</h3>
+                            <p>Financial reports, CSV, logs — everything important</p>
+                        </div>
+                    </div>
+                    <div class="drop-zone" id="drop-zone">
+                        <div class="drop-content">
+                            <div class="drop-icon">📂</div>
+                            <p>Drag & drop or Browse</p>
+                            <label class="browse-btn">Browse Files
+                                <input type="file" id="file-input" multiple hidden accept=".txt,.csv,.xlsx,.xls,.pdf,.json,.log,.md,.env,.doc,.docx">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="file-list" id="file-list"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-icon connect-icon">🔗</div>
+                        <div>
+                            <h3>Connect Apps</h3>
+                            <p>WhatsApp, Settings, Wi-Fi etc.</p>
+                        </div>
+                    </div>
+                    <div class="apps-grid">
+                        <button class="app-btn" data-app="WhatsApp" onclick="connectApp(this)"><span class="app-emoji">💬</span><span class="app-name">WhatsApp</span><span class="app-status">Connect</span></button>
+                        <button class="app-btn" data-app="Settings" onclick="connectApp(this)"><span class="app-emoji">⚙️</span><span class="app-name">Settings</span><span class="app-status">Connect</span></button>
+                        <button class="app-btn" data-app="Wi-Fi" onclick="connectApp(this)"><span class="app-emoji">📶</span><span class="app-name">Wi-Fi</span><span class="app-status">Connect</span></button>
+                        <button class="app-btn" data-app="Gmail" onclick="connectApp(this)"><span class="app-emoji">📧</span><span class="app-name">Gmail</span><span class="app-status">Connect</span></button>
+                        <button class="app-btn" data-app="Messages" onclick="connectApp(this)"><span class="app-emoji">💭</span><span class="app-name">Messages</span><span class="app-status">Connect</span></button>
+                        <button class="app-btn" data-app="Drive" onclick="connectApp(this)"><span class="app-emoji">☁️</span><span class="app-name">Cloud Drive</span><span class="app-status">Connect</span></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activate-section">
+                <div class="activate-card">
+                    <div class="activate-info">
+                        <h2>Ready to Activate?</h2>
+                        <p>Upload files + (optional) API Key. Then activate. Speak or type questions. Charts + voice answers.</p>
+                        <div class="checklist" id="checklist">
+                            <div class="check-item" id="check-files"><span class="check-icon">○</span> Upload at least one file</div>
+                            <div class="check-item" id="check-api"><span class="check-icon">○</span> API Key connected (optional)</div>
+                        </div>
+                    </div>
+                    <button class="activate-btn" onclick="activateSystem()">
+                        <span class="btn-text">ACTIVATE NEXUSAI</span>
+                        <span class="btn-icon">⚡</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- TRANSITION -->
+    <div id="transition-screen" class="screen">
+        <div class="transition-center">
+            <div class="loader-ring"></div>
+            <div class="transition-text">NexusAI Initializing...</div>
+            <div class="transition-sub" id="transition-sub">Loading intelligence</div>
+        </div>
+    </div>
+
+    <!-- ACTIVE SCREEN -->
+    <div id="active-screen" class="screen">
+        <div class="active-bg"><div class="scanline"></div></div>
+
+        <header class="active-header">
+            <div class="logo mini">
+                <div class="logo-icon small">
+                    <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="url(#g2)" stroke-width="2"/><path d="M12 20 L18 26 L28 14" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="g2" x1="0" y1="0" x2="40" y2="40"><stop offset="0%" stop-color="#22c55e"/><stop offset="100%" stop-color="#10b981"/></linearGradient></defs></svg>
+                </div>
+                <span class="brand">NexusAI</span>
+                <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+            </div>
+            <div class="header-controls">
+                <select id="lang-select" onchange="changeLanguage(this.value)" class="lang-select">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="hi">🇮🇳 Hindi</option>
+                    <option value="hinglish">🇮🇳 Hinglish</option>
+                </select>
+                <button class="theme-toggle" onclick="toggleTheme()"><span id="theme-icon">🌙</span></button>
+                <button class="power-btn" onclick="deactivateSystem()">OFF</button>
+            </div>
+        </header>
+
+        <div class="active-body">
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h4>API Status</h4>
+                    <div id="api-status" class="api-status-box">
+                        <span class="status-dot offline"></span>
+                        <span id="api-status-text">Demo Mode</span>
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Files</h4>
+                    <div class="sidebar-files" id="sidebar-files"><p class="empty-state">No files</p></div>
+                </div>
+                <div class="sidebar-section">
+                    <h4>Quick Ask</h4>
+                    <button class="quick-btn" onclick="askQuick('What was our company loss last year? Show with chart')">📉 Last Year Loss</button>
+                    <button class="quick-btn" onclick="askQuick('Show last year profit with chart')">📈 Last Year Profit</button>
+                    <button class="quick-btn" onclick="askQuick('How can we recover and make profit this year?')">💡 Recovery Plan</button>
+                </div>
+            </aside>
+
+            <div class="chat-area">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai-message">
+                        <div class="msg-avatar">N</div>
+                        <div class="msg-content">
+                            <div class="msg-header"><span class="msg-name">NexusAI</span><span class="msg-time">Just now</span></div>
+                            <div class="msg-text">System <strong>ONLINE</strong>.<br><br>
+                            You can <strong>speak</strong> or type questions.<br>
+                            Example: "Tell me last year's loss with chart"<br><br>
+                            I will answer with real charts from your files and also speak the answer.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="voice-row">
+                        <button id="mic-btn" class="mic-btn" onclick="toggleVoice()">
+                            <span id="mic-icon">🎤</span>
+                            <span id="mic-text">Tap to Speak</span>
+                        </button>
+                    </div>
+                    <div class="input-wrapper">
+                        <textarea id="user-input" placeholder="Type or speak your question..." rows="1" onkeydown="handleKey(event)"></textarea>
+                        <button class="send-btn" onclick="sendMessage()">➤</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <script src="app.js"></script>
+</body>
+</html>

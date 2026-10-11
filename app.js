@@ -49,24 +49,21 @@ async function handleFiles(fileList) {
     try {
         const res = await fetch('/api/upload', { method: 'POST', body: formData });
         const data = await res.json();
-        if (data.success && data.files) {
+
+        if (data.success && data.files && data.files.length) {
             data.files.forEach(f => {
                 if (!uploadedFiles.find(x => x.id === f.id)) uploadedFiles.push(f);
             });
             renderFileList();
             updateChecklist();
-            showToast(`${data.files.length} file(s) uploaded`);
-            // Auto detect API after upload
-            setTimeout(detectApiFromFiles, 400);
+            showToast(`✅ ${data.files.length} file(s) uploaded successfully`);
+            setTimeout(detectApiFromFiles, 500);
+        } else {
+            showToast('❌ Upload failed: ' + (data.error || 'Unknown error'));
         }
     } catch (err) {
-        for (let f of fileList) {
-            const id = Math.random().toString(36).slice(2, 10) + '_' + f.name;
-            uploadedFiles.push({ id, name: f.name, size: f.size, type: f.name.split('.').pop().toLowerCase() });
-        }
-        renderFileList();
-        updateChecklist();
-        showToast(`${fileList.length} file(s) added`);
+        console.error('Upload error:', err);
+        showToast('❌ Upload failed. Please try again.');
     }
 }
 
@@ -541,4 +538,5 @@ function autoResizeTextarea() {
         ta.style.height = 'auto';
         ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
     });
-}
+        }
+        

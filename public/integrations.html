@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aapka AI – Connect Your Systems</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(16px); }
+    .connect-card { transition: all 0.2s ease; }
+    .connect-card:hover { border-color: rgba(6, 182, 212, 0.4); }
+  </style>
+</head>
+<body class="bg-slate-950 text-white min-h-screen">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 glass sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center">
+          <i class="fas fa-plug text-sm"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-sm">Connect Your Systems</h1>
+          <p class="text-[10px] text-slate-400">Bring Your Own Credentials · Enterprise</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <a href="/customer" class="text-slate-400 hover:text-cyan-400">Customer</a>
+        <a href="/employee" class="text-slate-400 hover:text-amber-400">Employee</a>
+        <a href="/ceo" class="text-slate-400 hover:text-violet-400">CEO</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Why this approach -->
+    <div class="glass rounded-2xl border border-slate-800 p-6">
+      <h2 class="text-lg font-semibold mb-3 flex items-center gap-2">
+        <i class="fas fa-shield-alt text-cyan-400"></i>
+        Why You Connect Your Own Systems
+      </h2>
+      <div class="text-sm text-slate-300 space-y-2 leading-relaxed">
+        <p>Enterprise customers never share production credentials with external vendors. That is the correct security practice.</p>
+        <p>Aapka AI is built as a <strong class="text-white">secure connector framework</strong>. You add your own Salesforce, Zendesk, and Payment Gateway credentials. Once connected, the tool works with <em>your</em> live data and processes.</p>
+        <p class="text-cyan-400/90">The more powerful systems you connect, the more powerful Aapka AI becomes for your team.</p>
+      </div>
+    </div>
+
+    <!-- Connection Cards -->
+    <div class="grid md:grid-cols-1 gap-5">
+
+      <!-- Salesforce -->
+      <div class="connect-card glass rounded-2xl border border-slate-800 p-6" id="card-salesforce">
+        <div class="flex items-start justify-between mb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-blue-600/20 flex items-center justify-center">
+              <i class="fab fa-salesforce text-blue-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-semibold">Salesforce</h3>
+              <p class="text-xs text-slate-400">CRM · Customer records · Cases</p>
+            </div>
+          </div>
+          <span id="status-salesforce" class="text-[10px] px-2.5 py-1 rounded-full bg-slate-700 text-slate-300">NOT CONNECTED</span>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3 mb-4">
+          <div>
+            <label class="text-[11px] text-slate-400 mb-1 block">Instance URL</label>
+            <input id="sf-url" type="text" placeholder="https://yourorg.my.salesforce.com"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 mb-1 block">Client ID</label>
+            <input id="sf-client" type="text" placeholder="Connected App Client ID"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-[11px] text-slate-400 mb-1 block">Client Secret</label>
+            <input id="sf-secret" type="password" placeholder="Connected App Client Secret"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+          </div>
+        </div>
+        <button onclick="connectSystem('salesforce')" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition">
+          <i class="fas fa-link mr-1.5"></i> Connect Salesforce
+        </button>
+      </div>
+
+      <!-- Zendesk -->
+      <div class="connect-card glass rounded-2xl border border-slate-800 p-6" id="card-zendesk">
+        <div class="flex items-start justify-between mb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-emerald-600/20 flex items-center justify-center">
+              <i class="fas fa-headset text-emerald-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-semibold">Zendesk</h3>
+              <p class="text-xs text-slate-400">Tickets · Support history · Agents</p>
+            </div>
+          </div>
+          <span id="status-zendesk" class="text-[10px] px-2.5 py-1 rounded-full bg-slate-700 text-slate-300">NOT CONNECTED</span>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3 mb-4">
+          <div>
+            <label class="text-[11px] text-slate-400 mb-1 block">Subdomain</label>
+            <input id="zd-subdomain" type="text" placeholder="yourcompany"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 mb-1 block">Email</label>
+            <input id="zd-email" type="email" placeholder="admin@yourcompany.com"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="text-[11px] text-slate-400 mb-1 block">API Token</label>
+            <input id="zd-token" type="password" placeholder="Zendesk API Token"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+          </div>
+        </div>
+        <button onclick="connectSystem('zendesk')" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition">
+          <i class="fas fa-link mr-1.5"></i> Connect Zendesk
+        </button>
+      </div>
+
+      <!-- Payment Gateway -->
+      <div class="connect-card glass rounded-2xl border border-slate-800 p-6" id="card-payment">
+        <div class="flex items-start justify-between mb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-xl bg-violet-600/20 flex items-center justify-center">
+              <i class="fas fa-credit-card text-violet-400 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-semibold">Payment Gateway</h3>
+              <p class="text-xs text-slate-400">Razorpay / Stripe · Refunds · Orders</p>
+            </div>
+          </div>
+          <span id="status-payment" class="text-[10px] px-2.5 py-1 rounded-full bg-slate-700 text-slate-300">NOT CONNECTED</span>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3 mb-4">
+          <div>
+            <label class="text-[11px] text-slate-400 mb-1 block">Provider</label>
+            <select id="pay-provider" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+              <option value="razorpay">Razorpay</option>
+              <option value="stripe">Stripe</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 mb-1 block">Mode</label>
+            <select id="pay-mode" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+              <option value="test">Test Mode</option>
+              <option value="live">Live Mode</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 mb-1 block">Key ID / Publishable Key</label>
+            <input id="pay-key" type="text" placeholder="rzp_test_... or pk_test_..."
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 mb-1 block">Key Secret / Secret Key</label>
+            <input id="pay-secret" type="password" placeholder="Secret key"
+                   class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-500">
+          </div>
+        </div>
+        <button onclick="connectSystem('payment')" class="w-full sm:w-auto bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition">
+          <i class="fas fa-link mr-1.5"></i> Connect Payment Gateway
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer note -->
+    <div class="text-center text-xs text-slate-500 pt-4 pb-8">
+      Credentials are stored securely and used only to execute actions you trigger inside Aapka AI.<br>
+      You can disconnect any system at any time.
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 hidden max-w-sm glass border border-emerald-500/30 rounded-xl p-4 shadow-2xl z-50">
+    <p class="text-sm font-medium text-emerald-300" id="toastTitle">Connected</p>
+    <p class="text-xs text-slate-400 mt-1" id="toastMsg"></p>
+  </div>
+
+  <script>
+    async function loadStatus() {
+      try {
+        const r = await fetch('/api/integrations/status');
+        const d = await r.json();
+        updateBadge('salesforce', d.salesforce);
+        updateBadge('zendesk', d.zendesk);
+        updateBadge('payment', d.payment);
+      } catch(e) {}
+    }
+
+    function updateBadge(system, connected) {
+      const el = document.getElementById('status-' + system);
+      if (!el) return;
+      if (connected) {
+        el.textContent = 'CONNECTED';
+        el.className = 'text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-medium';
+      } else {
+        el.textContent = 'NOT CONNECTED';
+        el.className = 'text-[10px] px-2.5 py-1 rounded-full bg-slate-700 text-slate-300';
+      }
+    }
+
+    async function connectSystem(system) {
+      let payload = { system };
+
+      if (system === 'salesforce') {
+        payload.instance_url = document.getElementById('sf-url').value.trim();
+        payload.client_id = document.getElementById('sf-client').value.trim();
+        payload.client_secret = document.getElementById('sf-secret').value.trim();
+        if (!payload.instance_url || !payload.client_id || !payload.client_secret) {
+          alert('Please fill all Salesforce fields');
+          return;
+        }
+      }
+      if (system === 'zendesk') {
+        payload.subdomain = document.getElementById('zd-subdomain').value.trim();
+        payload.email = document.getElementById('zd-email').value.trim();
+        payload.api_token = document.getElementById('zd-token').value.trim();
+        if (!payload.subdomain || !payload.email || !payload.api_token) {
+          alert('Please fill all Zendesk fields');
+          return;
+        }
+      }
+      if (system === 'payment') {
+        payload.provider = document.getElementById('pay-provider').value;
+        payload.mode = document.getElementById('pay-mode').value;
+        payload.key_id = document.getElementById('pay-key').value.trim();
+        payload.key_secret = document.getElementById('pay-secret').value.trim();
+        if (!payload.key_id || !payload.key_secret) {
+          alert('Please fill Payment Gateway keys');
+          return;
+        }
+      }
+
+      try {
+        const r = await fetch('/api/integrations/connect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const d = await r.json();
+        if (d.success) {
+          updateBadge(system, true);
+          showToast(d.message || (system + ' connected successfully'), 'Connected');
+        } else {
+          alert(d.error || 'Connection failed');
+        }
+      } catch(e) {
+        alert('Network error. Please try again.');
+      }
+    }
+
+    function showToast(msg, title) {
+      document.getElementById('toastTitle').textContent = title || 'Success';
+      document.getElementById('toastMsg').textContent = msg;
+      document.getElementById('toast').classList.remove('hidden');
+      setTimeout(() => document.getElementById('toast').classList.add('hidden'), 4000);
+    }
+
+    loadStatus();
+  </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fast AI Enterprise</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-s="idle">
+<div class="bg"></div>
+
+<section id="setup" class="screen on">
+  <nav class="top">
+    <div class="brand"><i class="dot"></i>Fast AI <span class="tag">ENTERPRISE</span></div>
+    <span class="pill"><i class="live"></i> Workspace</span>
+  </nav>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Company data ko <em>bolkar</em> samjho</h1>
+      <p>Files, AI engine aur apps jodo. Phir bas poochho — jawab chart aur voice ke saath.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><small>Data Sources</small><b id="stFiles">0 files</b><span id="stSize">—</span></div>
+      <div class="stat"><small>AI Engine</small><b id="stAi">Not connected</b><span id="stAiSub">—</span></div>
+      <div class="stat"><small>Integrations</small><b id="stApps">0 active</b><span>WhatsApp · LinkedIn · +3</span></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="ch"><div class="ci">📁</div><div><h3>Data Sources</h3><p>Company ki purani files jodo — jitne folders chaho</p></div></div>
+        <button class="btn big" id="fmBtn">🗂️ File Manager connect karo</button>
+        <button class="btn ghost" id="addMoreBtn" style="width:100%;margin-top:8px;display:none">➕ Aur folders add karo</button>
+        <p class="hint">Dabane par browser “Allow” poochhega — allow karte hi chuna hua folder + saare sub-folders ki files jud jaati hain. Multiple baar dabake aur folders jod sakte ho.</p>
+        <div class="drop" id="drop">Files drop karo ya tap karke chuno<small>xlsx · csv · pdf · txt · json · md · log</small></div>
+        <input type="file" id="fileIn" multiple hidden>
+        <input type="file" id="folderIn" webkitdirectory multiple hidden>
+        <div class="row"><input id="srvPath" placeholder="Server folder path  (D:\Company\Data)"><button class="btn ghost" id="srvBtn">Connect</button></div>
+        <div id="fileList"></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><div class="ci">⚡</div><div><h3>AI Engine</h3><p>Koi bhi OpenAI-compatible provider</p></div></div>
+        <label>Provider</label>
+        <select id="prov"><option value="">Auto-detect (key / URL se)</option></select>
+        <label>API Key</label>
+        <input id="apiKey" type="password" placeholder="Key paste karo — provider khud pehchan lega" autocomplete="off">
+        <label>API URL</label>
+        <input id="apiBase" placeholder="https://api.groq.com/openai/v1">
+        <label>Model</label>
+        <input id="apiModel" list="modelList" placeholder="llama-3.3-70b-versatile">
+        <datalist id="modelList"></datalist>
+        <div class="row"><button class="btn" id="testBtn">⚡ Connect &amp; Test</button></div>
+        <div id="engineMsg" class="msg"></div>
+      </div>
+
+      <div class="card wide">
+        <div class="ch"><div class="ci">🔗</div><div><h3>Integrations</h3><p>Naye message aate hi Fast AI bolkar batayega</p></div></div>
+        <div class="apps" id="apps"></div>
+        <p class="hint" id="appHint"></p>
+        <button class="btn ghost small" id="testMsg">🔔 Test message bhejo</button>
+      </div>
+    </div>
+
+    <div class="launch">
+      <button class="start" id="start">
+        <span class="start-icon">📊</span>
+        <span class="start-text">Voice Assistant Start karo</span>
+        <span class="start-sub">Mic silently ON rahega · koi sound nahi</span>
+      </button>
+      <small>Start karte hi mic chalu ho jaata hai. Koi beep / tendency sound nahi aayegi.</small>
+    </div>
+  </div>
+</section>
+
+<section id="live" class="screen">
+  <nav class="top">
+    <button class="icon" id="back" aria-label="Back">←</button>
+    <div class="brand"><i class="dot"></i>Fast AI</div>
+    <div class="top-right">
+      <button class="pill" id="voiceBtn" title="Awaaz badlo">🔊 Ladka</button>
+      <button class="pill" id="lang">हिं</button>
+    </div>
+  </nav>
+  <main id="feed">
+    <div id="empty">
+      <div class="live-chart-wrap">
+        <div class="chart-title" id="liveChartTitle">Loading chart…</div>
+        <div class="live-chart">
+          <canvas id="liveCanvas"></canvas>
+        </div>
+      </div>
+      <h2>Boliye, main sun raha hoon</h2>
+      <p>Jaise: “5 saal pehle kitna loss hua tha?” · “Rahul ki file nikaalo”</p>
+    </div>
+  </main>
+  <footer class="dock">
+    <div id="heard"></div>
+    <div class="dockrow">
+      <span id="label">Mic band hai</span>
+      <button id="mic" class="mic-btn" aria-label="Mic on/off">🎤</button>
+      <button id="stop" class="pill stopb">⏹ Mic OFF</button>
+    </div>
+  </footer>
+</section>
+<div id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

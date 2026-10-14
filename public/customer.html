@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aapka AI – Customers</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>body{font-family:Inter,system-ui,sans-serif}</style>
+</head>
+<body class="bg-slate-50 text-gray-900 min-h-screen">
+<div id="lockout" class="fixed inset-0 bg-white/95 z-50 hidden flex items-center justify-center p-6">
+  <div class="max-w-lg w-full border border-red-200 rounded-2xl p-6 bg-white shadow-lg">
+    <h2 class="text-lg font-bold text-red-600 mb-2">Pipeline locked</h2>
+    <pre id="lockoutMsg" class="text-sm text-gray-700 whitespace-pre-wrap bg-red-50 p-4 rounded-xl"></pre>
+  </div>
+</div>
+<header class="bg-white border-b border-gray-200 sticky top-0 z-30">
+  <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm font-bold">A</div>
+      <div><div class="font-semibold text-sm">Customer chat</div><div class="text-[10px] text-gray-500">Refunds · status · escalate</div></div>
+    </div>
+    <a href="/" class="text-xs font-medium text-indigo-600 hover:underline">Console</a>
+  </div>
+</header>
+<main class="max-w-3xl mx-auto px-4 py-5 space-y-4">
+  <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+    <label class="text-xs text-gray-500 block mb-2">Workspace profile (sample until CRM connected)</label>
+    <select id="customerSelect" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white">
+      <option value="CUST001">Profile A · Premium</option>
+      <option value="CUST002">Profile B · Standard</option>
+      <option value="CUST003">Profile C · Premium</option>
+      <option value="CUST004">Profile D · Standard</option>
+      <option value="CUST005">Profile E · Premium</option>
+    </select>
+    <div id="custInfo" class="mt-3 text-xs text-gray-500"></div>
+  </div>
+  <div id="chat" class="bg-white border border-gray-200 rounded-2xl p-4 h-80 overflow-y-auto space-y-3 text-sm shadow-sm"></div>
+  <div class="flex flex-wrap gap-2">
+    <button type="button" onclick="quick('refund chahiye')" class="text-xs px-3 py-2 rounded-xl bg-red-50 text-red-700 border border-red-100">Refund</button>
+    <button type="button" onclick="quick('order status')" class="text-xs px-3 py-2 rounded-xl bg-gray-100 text-gray-700">Order status</button>
+    <button type="button" onclick="quick('complex problem')" class="text-xs px-3 py-2 rounded-xl bg-amber-50 text-amber-800 border border-amber-100">Complex problem</button>
+  </div>
+  <form onsubmit="send(event)" class="flex gap-2">
+    <input id="msg" type="text" placeholder="Describe the issue…" class="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-indigo-500 bg-white" autocomplete="off">
+    <button type="submit" class="bg-indigo-600 text-white px-5 py-3 rounded-xl text-sm font-medium">Send</button>
+  </form>
+</main>
+<script>
+const chat=document.getElementById('chat'),select=document.getElementById('customerSelect');
+function add(t,w){const d=document.createElement('div');d.className=w==='user'?'text-right':'text-left';
+  d.innerHTML=`<span class="inline-block max-w-[85%] px-3 py-2 rounded-2xl text-sm whitespace-pre-wrap ${w==='user'?'bg-indigo-600 text-white':'bg-gray-100 text-gray-800'}">${t}</span>`;
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
+async function loadCustomer(){try{const r=await fetch('/api/customer/'+select.value);if(r.status===403){const d=await r.json();document.getElementById('lockout').classList.remove('hidden');document.getElementById('lockoutMsg').textContent=d.message||'Locked';return}
+  document.getElementById('lockout').classList.add('hidden');const d=await r.json();
+  const o=(d.orders||[]).map(x=>`${x.item} · ${x.PaymentStatus} · Rs.${x.amount}`).join('<br>')||'No orders';
+  document.getElementById('custInfo').innerHTML=`<strong class="text-gray-900">${d.customer.name}</strong> · ${d.customer.tier}<br>${o}`}catch(e){}}
+async function send(e){if(e)e.preventDefault();const input=document.getElementById('msg');const text=input.value.trim();if(!text)return;add(text,'user');input.value='';
+  try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,customer_id:select.value})});const d=await r.json();
+    if(d.locked){document.getElementById('lockout').classList.remove('hidden');document.getElementById('lockoutMsg').textContent=d.message;return}
+    add(d.reply||'OK','bot');if(d.type==='refund_executed')loadCustomer()}catch(err){add('Network error','bot')}}
+function quick(t){document.getElementById('msg').value=t;send()}
+select.addEventListener('change',loadCustomer);loadCustomer();
+add('Hello — refund, order status, or complex problem (escalates to agent autopilot).','bot');
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login · Aapka AI</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:Inter,system-ui,sans-serif;background:#f1f5f9;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+</style>
+</head>
+<body>
+<div class="w-full max-w-sm bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+  <div class="text-center mb-5">
+    <div class="w-12 h-12 rounded-xl bg-indigo-600 text-white font-bold text-lg flex items-center justify-center mx-auto mb-3">A</div>
+    <h1 class="text-lg font-semibold text-gray-900">Aapka AI</h1>
+    <p class="text-sm text-gray-500 mt-1" id="subtitle">अपने Gmail / Email से लॉगिन करें</p>
+  </div>
+
+  <!-- LOGIN -->
+  <form id="formLogin" class="space-y-3" onsubmit="return doLogin(event)">
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Gmail / Email</label>
+      <input id="loginEmail" type="email" required autocomplete="username" placeholder="you@gmail.com"
+        class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <div>
+      <div class="flex justify-between items-center mb-1">
+        <label class="text-xs text-gray-500">Password</label>
+        <button type="button" onclick="showForgot()" class="text-xs text-indigo-600 font-medium">Forget password?</button>
+      </div>
+      <input id="loginPass" type="password" required autocomplete="current-password" placeholder="••••••••"
+        class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <p id="loginErr" class="text-xs text-red-600 hidden"></p>
+    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-xl text-sm">
+      लॉगिन करें
+    </button>
+    <p class="text-center text-xs text-gray-500 pt-1">
+      नया अकाउंट?
+      <button type="button" onclick="showRegister()" class="text-indigo-600 font-medium">Create account</button>
+    </p>
+  </form>
+
+  <!-- REGISTER -->
+  <form id="formReg" class="space-y-3 hidden" onsubmit="return doRegister(event)">
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Name</label>
+      <input id="regName" type="text" placeholder="Sahil" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Gmail / Email</label>
+      <input id="regEmail" type="email" required placeholder="you@gmail.com" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Password (कम से कम 6 अक्षर)</label>
+      <input id="regPass" type="password" required minlength="6" placeholder="••••••••" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <p id="regErr" class="text-xs text-red-600 hidden"></p>
+    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-xl text-sm">अकाउंट बनाएँ</button>
+    <p class="text-center text-xs text-gray-500">
+      <button type="button" onclick="showLogin()" class="text-indigo-600 font-medium">← वापस लॉगिन</button>
+    </p>
+  </form>
+
+  <!-- FORGOT -->
+  <form id="formForgot" class="space-y-3 hidden" onsubmit="return doForgot(event)">
+    <p class="text-xs text-gray-500">अपना Gmail / Email डालो। Verification code मिलेगा (15 मिनट)।</p>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Gmail / Email</label>
+      <input id="forgotEmail" type="email" required class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <p id="forgotMsg" class="text-xs text-gray-600 hidden"></p>
+    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Code भेजो</button>
+    <p class="text-center text-xs"><button type="button" onclick="showLogin()" class="text-indigo-600 font-medium">← लॉगिन</button></p>
+  </form>
+
+  <!-- RESET -->
+  <form id="formReset" class="space-y-3 hidden" onsubmit="return doReset(event)">
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Email</label>
+      <input id="resetEmail" type="email" required class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">Verification code (6 अंक)</label>
+      <input id="resetCode" type="text" required pattern="[0-9]{6}" maxlength="6" placeholder="123456" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">नया password</label>
+      <input id="resetPass" type="password" required minlength="6" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
+    <p id="resetErr" class="text-xs text-red-600 hidden"></p>
+    <button type="submit" class="w-full bg-indigo-600 text-white font-medium py-2.5 rounded-xl text-sm">Password बदलो</button>
+    <p class="text-center text-xs"><button type="button" onclick="showLogin()" class="text-indigo-600 font-medium">← लॉगिन</button></p>
+  </form>
+
+  <p class="text-[10px] text-gray-400 text-center mt-4 leading-relaxed">
+    Session ~30 दिन। उसी email से बाद में लॉगिन करोगे तो अकाउंट और company links इसी server पर रहते हैं (जब तक data disk / server बना रहे)।
+  </p>
+</div>
+<script>
+function hideAll() {
+  ['formLogin','formReg','formForgot','formReset'].forEach(id => document.getElementById(id).classList.add('hidden'));
+}
+function showLogin() { hideAll(); document.getElementById('formLogin').classList.remove('hidden'); document.getElementById('subtitle').textContent = 'अपने Gmail / Email से लॉगिन करें'; }
+function showRegister() { hideAll(); document.getElementById('formReg').classList.remove('hidden'); document.getElementById('subtitle').textContent = 'नया अकाउंट बनाएँ'; }
+function showForgot() { hideAll(); document.getElementById('formForgot').classList.remove('hidden'); document.getElementById('subtitle').textContent = 'Forget password'; }
+function showReset(email) {
+  hideAll();
+  document.getElementById('formReset').classList.remove('hidden');
+  document.getElementById('subtitle').textContent = 'नया password सेट करें';
+  if (email) document.getElementById('resetEmail').value = email;
+}
+function nextUrl() {
+  const u = new URLSearchParams(location.search).get('next');
+  return u && u.startsWith('/') ? u : '/';
+}
+async function doLogin(e) {
+  e.preventDefault();
+  const err = document.getElementById('loginErr');
+  err.classList.add('hidden');
+  try {
+    const r = await fetch('/api/auth/login', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: document.getElementById('loginEmail').value.trim(),
+        password: document.getElementById('loginPass').value
+      })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.message || d.error || 'Login failed');
+    location.href = nextUrl();
+  } catch (ex) {
+    err.textContent = ex.message;
+    err.classList.remove('hidden');
+  }
+  return false;
+}
+async function doRegister(e) {
+  e.preventDefault();
+  const err = document.getElementById('regErr');
+  err.classList.add('hidden');
+  try {
+    const r = await fetch('/api/auth/register', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: document.getElementById('regName').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        password: document.getElementById('regPass').value
+      })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.message || d.error || 'Failed');
+    location.href = nextUrl();
+  } catch (ex) {
+    err.textContent = ex.message;
+    err.classList.remove('hidden');
+  }
+  return false;
+}
+async function doForgot(e) {
+  e.preventDefault();
+  const msg = document.getElementById('forgotMsg');
+  msg.classList.remove('hidden');
+  msg.textContent = '…';
+  try {
+    const email = document.getElementById('forgotEmail').value.trim();
+    const r = await fetch('/api/auth/forgot', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ email })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.message || d.error || 'Failed');
+    msg.textContent = d.message + (d.pilot_code ? (' Code: ' + d.pilot_code) : '');
+    showReset(email);
+    if (d.pilot_code) document.getElementById('resetCode').value = d.pilot_code;
+  } catch (ex) {
+    msg.textContent = ex.message;
+  }
+  return false;
+}
+async function doReset(e) {
+  e.preventDefault();
+  const err = document.getElementById('resetErr');
+  err.classList.add('hidden');
+  try {
+    const r = await fetch('/api/auth/reset', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        email: document.getElementById('resetEmail').value.trim(),
+        code: document.getElementById('resetCode').value.trim(),
+        password: document.getElementById('resetPass').value
+      })
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.message || d.error || 'Failed');
+    alert(d.message || 'Password updated');
+    showLogin();
+  } catch (ex) {
+    err.textContent = ex.message;
+    err.classList.remove('hidden');
+  }
+  return false;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+Aapka AI CONNECT+SECURE FINAL v94 — file sizes (verify after GitHub upload)
+
+app.py                         ~133892 bytes   (~3070 lines)  FULL backend
+public/admin-app.js            ~55122 bytes    console UI
+public/owner.html              ~10103 bytes    link generator (do not break)
+public/login.html              ~15248 bytes    Google/email login
+public/customer.html           ~5817 bytes     customer portal NO login
+public/admin.html              ~6227 bytes
+public/provider_endpoints.json ~1218 bytes     known API hosts
+requirements.txt               Flask + pymongo
+Procfile                       web: python app.py
+README.md                      setup
+
+If your GitHub app.py is under 100KB or under 2000 lines, upload FAILED (partial paste).
+Upload via: GitHub website → Upload files → drag whole folder, OR git push.
+Do NOT paste into the web editor for large files.
+
+FEATURES:
+- Tool /w/ID = login required
+- Customer /w/ID/customer = no login
+- Unknown /w/guess = 404
+- Mongo persistence (MONGODB_URI)
+- Live connect verify SF/ZD/Razorpay/Stripe/Slack
+- Isolation per workspace
